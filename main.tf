@@ -125,6 +125,13 @@ resource "google_sql_database_instance" "default" {
       hour         = var.maintenance_window_hour
       update_track = var.maintenance_window_update_track
     }
+    
+    insights_config {
+      query_insights_enabled  = true
+      query_string_length     = 1024
+      record_application_tags = true
+      record_client_address   = true
+    }
   }
 
   lifecycle {
