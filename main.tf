@@ -125,7 +125,7 @@ resource "google_sql_database_instance" "default" {
       hour         = var.maintenance_window_hour
       update_track = var.maintenance_window_update_track
     }
-    
+
     insights_config {
       query_insights_enabled  = true
       query_string_length     = 1024
@@ -157,6 +157,13 @@ resource "google_sql_database" "default" {
   charset    = var.db_charset
   collation  = var.db_collation
   depends_on = [null_resource.module_depends_on, google_sql_database_instance.default]
+
+  lifecycle {
+    replace_triggered_by = [
+      google_sql_database_instance.default.region,
+      google_sql_database_instance.default.database_version,
+    ]
+  }
 }
 
 resource "google_sql_database" "additional_databases" {
@@ -167,6 +174,13 @@ resource "google_sql_database" "additional_databases" {
   collation  = lookup(each.value, "collation", null)
   instance   = google_sql_database_instance.default.name
   depends_on = [null_resource.module_depends_on, google_sql_database_instance.default]
+
+  lifecycle {
+    replace_triggered_by = [
+      google_sql_database_instance.default.region,
+      google_sql_database_instance.default.database_version,
+    ]
+  }
 }
 
 resource "random_id" "user-password" {
@@ -188,6 +202,10 @@ resource "google_sql_user" "default" {
 
   lifecycle {
     ignore_changes = [password]
+    replace_triggered_by = [
+      google_sql_database_instance.default.region,
+      google_sql_database_instance.default.database_version,
+    ]
   }
 }
 
@@ -200,6 +218,10 @@ resource "google_sql_user" "additional_users" {
   depends_on = [null_resource.module_depends_on, google_sql_database_instance.default]
   lifecycle {
     ignore_changes = [password]
+    replace_triggered_by = [
+      google_sql_database_instance.default.region,
+      google_sql_database_instance.default.database_version,
+    ]
   }
 }
 
@@ -235,6 +257,13 @@ resource "google_sql_user" "iam_account" {
     null_resource.module_depends_on,
     google_project_iam_member.iam_binding,
   ]
+
+  lifecycle {
+    replace_triggered_by = [
+      google_sql_database_instance.default.region,
+      google_sql_database_instance.default.database_version,
+    ]
+  }
 }
 
 resource "null_resource" "module_depends_on" {
