@@ -74,6 +74,7 @@ variable "disk_autoresize" {
 
 variable "disk_size" {
   description = "The disk size for the master instance."
+  type        = number
   default     = 10
 }
 
@@ -172,8 +173,9 @@ variable "ip_configuration" {
 
 // Read Replicas
 variable "read_replicas" {
-  description = "List of read replicas to create"
-  type = list(object({
+  description = <<EOT
+  List of read replicas to create
+  {
     name            = string
     tier            = string
     zone            = string
@@ -191,8 +193,10 @@ variable "read_replicas" {
       private_network     = string
       require_ssl         = bool
     })
-  }))
-  default = []
+  }
+  EOT
+  type        = list(any)
+  default     = []
 }
 
 variable "read_replica_name_suffix" {
