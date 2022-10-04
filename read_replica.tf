@@ -23,7 +23,7 @@ locals {
 resource "google_sql_database_instance" "replicas" {
   for_each             = local.replicas
   project              = var.project_id
-  name                 = "${local.master_instance_name}-replica-${var.read_replica_name_suffix}${each.value.name}"
+  name                 = "${local.master_instance_name}-replica-${var.read_replica_name_suffix}${lookup(each.value, "name", "")}"
   database_version     = var.database_version
   region               = join("-", slice(split("-", lookup(each.value, "zone", var.zone)), 0, 2))
   master_instance_name = google_sql_database_instance.default.name
@@ -38,7 +38,7 @@ resource "google_sql_database_instance" "replicas" {
     activation_policy = "ALWAYS"
 
     dynamic "ip_configuration" {
-      for_each = [lookup(each.value, "ip_configuration", {})]
+      for_each = [lookup(each.value, "ip_configuration", var.ip_configuration)]
       content {
         ipv4_enabled    = lookup(ip_configuration.value, "ipv4_enabled", null)
         private_network = lookup(ip_configuration.value, "private_network", null)
@@ -66,13 +66,13 @@ resource "google_sql_database_instance" "replicas" {
     }
 
     disk_autoresize = lookup(each.value, "disk_autoresize", var.disk_autoresize)
-    disk_size       = lookup(each.value, "disk_size", var.disk_size)
+    disk_size       = var.disk_autoresize ? null : lookup(each.value, "disk_size", var.disk_size)
     disk_type       = lookup(each.value, "disk_type", var.disk_type)
     pricing_plan    = "PER_USE"
     user_labels     = lookup(each.value, "user_labels", var.user_labels)
 
     dynamic "database_flags" {
-      for_each = lookup(each.value, "database_flags", [])
+      for_each = lookup(each.value, "database_flags", var.database_flags)
       content {
         name  = lookup(database_flags.value, "name", null)
         value = lookup(database_flags.value, "value", null)
