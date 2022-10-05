@@ -54,15 +54,13 @@ resource "google_sql_database_instance" "replicas" {
         }
       }
     }
-    dynamic "insights_config" {
-      for_each = var.insights_config != null ? [var.insights_config] : []
 
-      content {
-        query_insights_enabled  = true
-        query_string_length     = lookup(insights_config.value, "query_string_length", 1024)
-        record_application_tags = lookup(insights_config.value, "record_application_tags", false)
-        record_client_address   = lookup(insights_config.value, "record_client_address", false)
-      }
+    # Query Insights is free, enable it by default
+    insights_config {
+      query_insights_enabled  = true
+      query_string_length     = lookup(insights_config.value, "query_string_length", 1024)
+      record_application_tags = lookup(insights_config.value, "record_application_tags", false)
+      record_client_address   = lookup(insights_config.value, "record_client_address", false)
     }
 
     disk_autoresize = lookup(each.value, "disk_autoresize", var.disk_autoresize)
