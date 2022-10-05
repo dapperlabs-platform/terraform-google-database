@@ -146,13 +146,16 @@ variable "backup_configuration" {
 }
 
 variable "insights_config" {
-  description = "The insights_config settings for the database."
-  type = object({
+  description = <<EOT
+  The insights_config settings for the database.
+  {
     query_string_length     = number
     record_application_tags = bool
     record_client_address   = bool
-  })
-  default = null
+  }
+  EOT
+  type        = map(any)
+  default     = {}
 }
 
 variable "ip_configuration" {
