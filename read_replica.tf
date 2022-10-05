@@ -58,9 +58,9 @@ resource "google_sql_database_instance" "replicas" {
     # Query Insights is free, enable it by default
     insights_config {
       query_insights_enabled  = true
-      query_string_length     = lookup(insights_config.value, "query_string_length", 1024)
-      record_application_tags = lookup(insights_config.value, "record_application_tags", false)
-      record_client_address   = lookup(insights_config.value, "record_client_address", false)
+      query_string_length     = lookup(var.insights_config, "query_string_length", 1024)
+      record_application_tags = lookup(var.insights_config, "record_application_tags", true)
+      record_client_address   = lookup(var.insights_config, "record_client_address", true)
     }
 
     disk_autoresize = lookup(each.value, "disk_autoresize", var.disk_autoresize)
