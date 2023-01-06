@@ -21,13 +21,14 @@ locals {
 }
 
 resource "google_sql_database_instance" "replicas" {
-  for_each             = local.replicas
-  project              = var.project_id
-  name                 = "${local.master_instance_name}-replica-${var.read_replica_name_suffix}${lookup(each.value, "name", "")}"
-  database_version     = var.database_version
-  region               = join("-", slice(split("-", lookup(each.value, "zone", var.zone)), 0, 2))
-  master_instance_name = google_sql_database_instance.default.name
-  deletion_protection  = var.read_replica_deletion_protection
+  for_each                      = local.replicas
+  project                       = var.project_id
+  name                          = "${local.master_instance_name}-replica-${var.read_replica_name_suffix}${lookup(each.value, "name", "")}"
+  database_version              = var.database_version
+  region                        = join("-", slice(split("-", lookup(each.value, "zone", var.zone)), 0, 2))
+  master_instance_name          = google_sql_database_instance.default.name
+  deletion_protection           = var.read_replica_deletion_protection
+  service_account_email_address = var.service_account_email_address
 
   replica_configuration {
     failover_target = false

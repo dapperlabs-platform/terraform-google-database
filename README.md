@@ -59,7 +59,7 @@ Note: CloudSQL provides [disk autoresize](https://cloud.google.com/sql/docs/mysq
 | instance\_name | The instance name for the master instance |
 | instance\_self\_link | The URI of the master instance |
 | instance\_server\_ca\_cert | The CA certificate information used to connect to the SQL instance via SSL |
-| instance\_service\_account\_email\_address | The service account email address assigned to the master instance |
+| service\_account\_email\_address | The service account email address assigned to the master instance |
 | instances | A list of all `google_sql_database_instance` resources we've created |
 | primary | The `google_sql_database_instance` resource representing the primary instance |
 | private\_ip\_address | The first private (PRIVATE) IPv4 address assigned for the master instance |
@@ -70,6 +70,5 @@ Note: CloudSQL provides [disk autoresize](https://cloud.google.com/sql/docs/mysq
 | replicas\_instance\_first\_ip\_addresses | The first IPv4 addresses of the addresses assigned for the replica instances |
 | replicas\_instance\_self\_links | The URIs of the replica instances |
 | replicas\_instance\_server\_ca\_certs | The CA certificates information used to connect to the replica instances via SSL |
-| replicas\_instance\_service\_account\_email\_addresses | The service account email addresses assigned to the replica instances |
 
 <!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->

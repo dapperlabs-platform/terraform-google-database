@@ -42,13 +42,14 @@ resource "random_id" "suffix" {
 }
 
 resource "google_sql_database_instance" "default" {
-  provider            = google-beta
-  project             = var.project_id
-  name                = local.master_instance_name
-  database_version    = var.database_version
-  region              = var.region
-  encryption_key_name = var.encryption_key_name
-  deletion_protection = var.deletion_protection
+  provider                      = google-beta
+  project                       = var.project_id
+  name                          = local.master_instance_name
+  database_version              = var.database_version
+  region                        = var.region
+  encryption_key_name           = var.encryption_key_name
+  deletion_protection           = var.deletion_protection
+  service_account_email_address = var.service_account_email_address
 
   settings {
     tier              = var.tier

@@ -316,3 +316,9 @@ variable "enable_default_user" {
   type        = bool
   default     = true
 }
+
+variable "service_account_email_address" {
+  description = "Service account for primary and replicas"
+  type        = string
+  default     = null
+}
