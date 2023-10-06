@@ -52,6 +52,7 @@ resource "google_sql_database_instance" "default" {
 
   settings {
     tier              = var.tier
+    edition           = var.edition
     activation_policy = var.activation_policy
     availability_type = var.availability_type
 
@@ -115,7 +116,7 @@ resource "google_sql_database_instance" "default" {
     user_labels = var.user_labels
 
     location_preference {
-      zone = var.zone
+      zone           = var.zone
       secondary_zone = var.secondary_zone
     }
 

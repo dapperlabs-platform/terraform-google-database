@@ -49,10 +49,16 @@ variable "tier" {
   default     = "db-f1-micro"
 }
 
+variable "edition" {
+  description = "The edition of the master instance"
+  type        = string
+  default     = "ENTERPRISE"
+}
+
 variable "zone" {
   type        = string
   description = "The zone for the master instance, it should be something like: `us-central1-a`, `us-east1-c`."
-} 
+}
 
 variable "secondary_zone" {
   type        = string
