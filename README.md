@@ -42,6 +42,7 @@ Note: CloudSQL provides [disk autoresize](https://cloud.google.com/sql/docs/mysq
 | read\_replicas | List of read replicas to create | <pre>list(object({<br>    name            = string<br>    tier            = string<br>    zone            = string<br>    disk_type       = string<br>    disk_autoresize = bool<br>    disk_size       = string<br>    user_labels     = map(string)<br>    database_flags = list(object({<br>      name  = string<br>      value = string<br>    }))<br>    ip_configuration = object({<br>      authorized_networks = list(map(string))<br>      ipv4_enabled        = bool<br>      private_network     = string<br>      require_ssl         = bool<br>    })<br>  }))</pre> | `[]` | no |
 | region | The region of the Cloud SQL resources | `string` | `"us-central1"` | no |
 | tier | The tier for the master instance. | `string` | `"db-f1-micro"` | no |
+| edition | The edition of the master instance. | `string` | `"ENTERPRISE"` | no |
 | update\_timeout | The optional timout that is applied to limit long database updates. | `string` | `"15m"` | no |
 | user\_labels | The key/value labels for the master instances. | `map(string)` | `{}` | no |
 | user\_name | The name of the default user | `string` | `"default"` | no |
