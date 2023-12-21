@@ -36,6 +36,7 @@ resource "google_sql_database_instance" "replicas" {
   settings {
     tier              = lookup(each.value, "tier", var.tier)
     activation_policy = "ALWAYS"
+    pricing_plan      = lookup(each.value, "pricing_plan", var.pricing_plan)
 
     dynamic "ip_configuration" {
       for_each = [lookup(each.value, "ip_configuration", var.ip_configuration)]
