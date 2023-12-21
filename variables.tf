@@ -164,8 +164,18 @@ variable "insights_config" {
     record_client_address   = bool
   }
   EOT
-  type        = map(any)
-  default     = {}
+  type = object({
+    query_insights_enabled  = bool
+    query_string_length     = number
+    record_application_tags = bool
+    record_client_address   = bool
+  })
+  default = {
+    query_insights_enabled  = true
+    query_string_length     = 1024
+    record_application_tags = false
+    record_client_address   = false
+  }
 }
 
 variable "ip_configuration" {
