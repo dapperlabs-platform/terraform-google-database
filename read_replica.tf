@@ -66,7 +66,7 @@ resource "google_sql_database_instance" "replicas" {
     disk_autoresize = lookup(each.value, "disk_autoresize", var.disk_autoresize)
     disk_size       = var.disk_autoresize ? null : lookup(each.value, "disk_size", var.disk_size)
     disk_type       = lookup(each.value, "disk_type", var.disk_type)
-    pricing_plan    = "PER_USE"
+    pricing_plan    = lookup(each.value, "pricing_plan", var.pricing_plan)
     user_labels     = lookup(each.value, "user_labels", var.user_labels)
 
     dynamic "database_flags" {
