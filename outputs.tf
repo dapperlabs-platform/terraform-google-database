@@ -61,6 +61,11 @@ output "instance_service_account_email_address" {
 }
 
 // Replicas
+output "replicas_instance_first_public_ip_addresses" {
+  value       = [for r in google_sql_database_instance.replicas : r.public_ip_address]
+  description = "The first IPv4 addresses of the addresses assigned for the replica instances"
+}
+
 output "replicas_instance_first_ip_addresses" {
   value       = [for r in google_sql_database_instance.replicas : r.ip_address]
   description = "The first IPv4 addresses of the addresses assigned for the replica instances"
