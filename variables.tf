@@ -52,7 +52,7 @@ variable "tier" {
 variable "edition" {
   description = "The edition of the master instance"
   type        = string
-  default     = "ENTERPRISE"
+  default     = null
 }
 
 variable "zone" {
