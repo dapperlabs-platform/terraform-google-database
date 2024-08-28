@@ -184,13 +184,15 @@ variable "ip_configuration" {
     authorized_networks = list(map(string))
     ipv4_enabled        = bool
     private_network     = string
-    require_ssl         = optional(bool)
-    ssl_mode            = optional(string)
+    require_ssl         = bool
+    ssl_mode            = string
   })
   default = {
     authorized_networks = []
     ipv4_enabled        = true
     private_network     = null
+    require_ssl         = null
+    ssl_mode            = null
   }
 }
 
