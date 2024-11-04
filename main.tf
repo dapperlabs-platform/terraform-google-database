@@ -27,9 +27,9 @@ locals {
   databases = { for db in var.additional_databases : db.name => db }
   users     = { for u in var.additional_users : u.name => u }
   iam_users = [for iu in var.iam_user_emails : {
-    email     = iu,
-    user_type = can(regex(".*gserviceaccount\\.com$", iu)) ? "CLOUD_IAM_SERVICE_ACCOUNT" : can(regex(".*access\\.dapperlabs\\.com$", iu)) ? "CLOUD_IAM_GROUP" : "CLOUD_IAM_USER",
-    prefix    = can(regex(".*gserviceaccount\\.com$", iu)) ? "serviceAccount:${iu}" : can(regex(".*access\\.dapperlabs\\.com$", iu)) ? "group:${iu}" : "user:${iu}"
+    email       = iu,
+    user_type   = can(regex("serviceAccount:", iu)) ? "CLOUD_IAM_SERVICE_ACCOUNT" : can(regex("group:", iu)) ? "CLOUD_IAM_GROUP" : "CLOUD_IAM_USER",
+    clean_email = regex("^.*:(.*)$", iu) != "" ? regex("^.*:(.*)$", iu) : iu
 
   }]
 
@@ -205,7 +205,7 @@ resource "google_project_iam_member" "iam_binding" {
   }
   project = var.project_id
   role    = "roles/cloudsql.instanceUser"
-  member  = each.value.prefix
+  member  = each.value.email
 }
 
 resource "google_sql_user" "iam_account" {
@@ -214,7 +214,7 @@ resource "google_sql_user" "iam_account" {
     "${iu.email} ${iu.user_type}" => iu
   }
   project = var.project_id
-  name    = each.value.user_type == "CLOUD_IAM_SERVICE_ACCOUNT" ? trimsuffix(each.value.email, ".gserviceaccount.com") : each.value.email
+  name    = each.value.user_type == "CLOUD_IAM_SERVICE_ACCOUNT" ? trimsuffix(each.value.clean_email, ".gserviceaccount.com") : each.value.clean_email
 
   instance = google_sql_database_instance.default.name
   type     = each.value.user_type
