@@ -214,11 +214,8 @@ resource "google_sql_user" "iam_account" {
     "${iu.email} ${iu.user_type}" => iu
   }
   project = var.project_id
-  name = each.value.user_type ? (
-    trimsuffix(each.value.email, ".gserviceaccount.com")
-    ) : (
-    each.value.email
-  )
+  name    = each.value.user_type == "CLOUD_IAM_SERVICE_ACCOUNT" ? trimsuffix(each.value.email, ".gserviceaccount.com") : each.value.email
+
   instance = google_sql_database_instance.default.name
   type     = each.value.user_type
 
