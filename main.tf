@@ -27,8 +27,10 @@ locals {
   databases = { for db in var.additional_databases : db.name => db }
   users     = { for u in var.additional_users : u.name => u }
   iam_users = [for iu in var.iam_user_emails : {
-    email         = iu,
-    is_account_sa = trimsuffix(iu, "gserviceaccount.com") == iu ? false : true
+    email     = iu,
+    user_type = contains(iu, "gserviceaccount.com") ? "CLOUD_IAM_SERVICE_ACCOUNT" : contains(iu, "access.dapperlabs.com") ? "CLOUD_IAM_GROUP" : "CLOUD_IAM_USER"
+    prefix    = user_type == "CLOUD_IAM_SERVICE_ACCOUNT" ? "serviceAccount:${each.value.email}" : user_type == "CLOUD_IAM_USER" ? "user:${each.value.email}" : "group:${each.value.email}"
+
   }]
 
   retained_backups = lookup(var.backup_configuration, "retained_backups", null)
@@ -199,30 +201,26 @@ resource "google_sql_user" "additional_users" {
 resource "google_project_iam_member" "iam_binding" {
   for_each = {
     for iu in local.iam_users :
-    "${iu.email} ${iu.is_account_sa}" => iu
+    "${iu.email} ${iu.user_type}" => iu
   }
   project = var.project_id
   role    = "roles/cloudsql.instanceUser"
-  member = each.value.is_account_sa ? (
-    "serviceAccount:${each.value.email}"
-    ) : (
-    "user:${each.value.email}"
-  )
+  member  = each.value.prefix
 }
 
 resource "google_sql_user" "iam_account" {
   for_each = {
     for iu in local.iam_users :
-    "${iu.email} ${iu.is_account_sa}" => iu
+    "${iu.email} ${iu.user_type}" => iu
   }
   project = var.project_id
-  name = each.value.is_account_sa ? (
+  name = each.value.user_type ? (
     trimsuffix(each.value.email, ".gserviceaccount.com")
     ) : (
     each.value.email
   )
   instance = google_sql_database_instance.default.name
-  type     = each.value.is_account_sa ? "CLOUD_IAM_SERVICE_ACCOUNT" : "CLOUD_IAM_USER"
+  type     = user
 
   depends_on = [
     null_resource.module_depends_on,
