@@ -28,8 +28,8 @@ locals {
   users     = { for u in var.additional_users : u.name => u }
   iam_users = [for iu in var.iam_user_emails : {
     email     = iu,
-    user_type = contains(iu, "gserviceaccount.com") ? "CLOUD_IAM_SERVICE_ACCOUNT" : contains(iu, "access.dapperlabs.com") ? "CLOUD_IAM_GROUP" : "CLOUD_IAM_USER"
-    prefix    = user_type == "CLOUD_IAM_SERVICE_ACCOUNT" ? "serviceAccount:${email}" : user_type == "CLOUD_IAM_USER" ? "user:${email}" : "group:${email}"
+    user_type = contains(iu, "gserviceaccount.com") ? "CLOUD_IAM_SERVICE_ACCOUNT" : contains(iu, "access.dapperlabs.com") ? "CLOUD_IAM_GROUP" : "CLOUD_IAM_USER",
+    prefix    = contains(iu, "gserviceaccount.com") ? "serviceAccount:${iu}" : contains(iu, "access.dapperlabs.com") ? "group:${iu}" : "user:${iu}"
 
   }]
 
