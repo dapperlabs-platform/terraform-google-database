@@ -29,7 +29,7 @@ locals {
   iam_users = [for iu in var.iam_user_emails : {
     email       = iu,
     user_type   = can(regex("serviceAccount:", iu)) ? "CLOUD_IAM_SERVICE_ACCOUNT" : can(regex("group:", iu)) ? "CLOUD_IAM_GROUP" : "CLOUD_IAM_USER",
-    clean_email = regex("^.*:(.*)$", iu)
+    clean_email = regex("^.*:(.*)$", iu)[0]
 
   }]
 
