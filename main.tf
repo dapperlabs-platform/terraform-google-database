@@ -220,7 +220,7 @@ resource "google_sql_user" "iam_account" {
     each.value.email
   )
   instance = google_sql_database_instance.default.name
-  type     = user
+  type     = each.value.user_type
 
   depends_on = [
     null_resource.module_depends_on,
