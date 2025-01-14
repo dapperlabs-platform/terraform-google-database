@@ -319,6 +319,12 @@ variable "deletion_protection" {
   default     = true
 }
 
+variable "deletion_protection_enabled" {
+  description = "Used to block Terraform from deleting a SQL Instance."
+  type        = bool
+  default     = true
+}
+
 variable "read_replica_deletion_protection" {
   description = "Used to block Terraform from deleting replica SQL Instances."
   type        = bool
