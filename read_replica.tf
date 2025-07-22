@@ -35,6 +35,7 @@ resource "google_sql_database_instance" "replicas" {
 
   settings {
     tier              = lookup(each.value, "tier", var.tier)
+    edition           = var.edition
     activation_policy = "ALWAYS"
 
     dynamic "ip_configuration" {
