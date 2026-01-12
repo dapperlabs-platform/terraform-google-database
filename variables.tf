@@ -343,18 +343,11 @@ variable "enable_default_user" {
   default     = true
 }
 
-# variable "final_backup_config" {
-#   description = "Configuration for the final backup when the instance is deleted"
-#   type = object({
-#     enabled        = bool
-#     retention_days = number
-#   })
-#   default = null
-# }
-
 variable "final_backup_config" {
-  type = optional(object({
-    enabled         = bool
+  description = "Configuration for the final backup when the instance is deleted"
+  type = object({
+    enabled        = bool
     retention_days = number
-  }))
+  })
+  default = null
 }
