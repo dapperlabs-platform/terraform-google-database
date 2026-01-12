@@ -349,4 +349,7 @@ variable "final_backup_config" {
     enabled        = bool
     retention_days = number
   })
+  default = {
+    enabled        = false
+  }
 }
