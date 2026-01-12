@@ -352,5 +352,5 @@ variable "final_backup_enabled" {
 variable "final_backup_retention_days" {
   description = "The number of days to retain the final backup"
   type        = number
-  default     = 0
+  default     = 1
 }
