@@ -313,14 +313,14 @@ variable "module_depends_on" {
   default     = []
 }
 
-variable "deletion_protection" {
+variable "terraform_deletion_protection" {
   description = "Used to block Terraform from deleting a SQL Instance."
   type        = bool
   default     = true
 }
 
-variable "deletion_protection_enabled" {
-  description = "Used to block Terraform from deleting a SQL Instance."
+variable "gcp_deletion_protection" {
+  description = "Used to block deleting a SQL Instance."
   type        = bool
   default     = true
 }
