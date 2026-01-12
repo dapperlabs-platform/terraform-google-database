@@ -60,7 +60,7 @@ resource "google_sql_database_instance" "default" {
     deletion_protection_enabled = var.gcp_deletion_protection
 
     dynamic "final_backup_config" {
-      for_each = var.final_backup_enabled ? [1] : []
+      for_each = [var.final_backup_config]
       content {
         enabled        = var.final_backup_enabled
         retention_days = var.final_backup_retention_days
