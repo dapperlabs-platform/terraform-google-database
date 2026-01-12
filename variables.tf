@@ -349,4 +349,12 @@ variable "final_backup_config" {
     enabled        = bool
     retention_days = number
   })
+  default = null
+}
+
+variable "final_backup_config" {
+  type = optional(object({
+    enabled         = bool
+    retention_days = number
+  }))
 }
