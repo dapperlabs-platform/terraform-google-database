@@ -313,14 +313,14 @@ variable "module_depends_on" {
   default     = []
 }
 
-variable "deletion_protection" {
+variable "terraform_deletion_protection" {
   description = "Used to block Terraform from deleting a SQL Instance."
   type        = bool
   default     = true
 }
 
-variable "deletion_protection_enabled" {
-  description = "Used to block Terraform from deleting a SQL Instance."
+variable "gcp_deletion_protection" {
+  description = "Used to block deleting a SQL Instance."
   type        = bool
   default     = true
 }
@@ -341,4 +341,13 @@ variable "enable_default_user" {
   description = "Enable or disable the creation of the default user"
   type        = bool
   default     = true
+}
+
+variable "final_backup_config" {
+  description = "Configuration for the final backup when the instance is deleted"
+  type = object({
+    enabled        = bool
+    retention_days = number
+  })
+  default = null
 }

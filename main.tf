@@ -50,14 +50,22 @@ resource "google_sql_database_instance" "default" {
   database_version    = var.database_version
   region              = var.region
   encryption_key_name = var.encryption_key_name
-  deletion_protection = var.deletion_protection
+  deletion_protection = var.terraform_deletion_protection
 
   settings {
     tier              = var.tier
     edition           = var.edition
     activation_policy = var.activation_policy
     availability_type = var.availability_type
-    deletion_protection_enabled = var.deletion_protection_enabled
+    deletion_protection_enabled = var.gcp_deletion_protection
+
+    dynamic "final_backup_config" {
+      for_each = var.final_backup_config == null ? [] : [var.final_backup_config]
+      content {
+        enabled        = final_backup_config.value.enabled
+        retention_days  = final_backup_config.value.retention_days
+      }
+    }
 
     dynamic "backup_configuration" {
       for_each = [var.backup_configuration]
